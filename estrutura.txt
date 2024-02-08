@@ -1,0 +1,77 @@
+* Agenda:
+> Atributos:
+    > Tarefas para executar: lista de Tarefa
+    > Tarefas executando: lista de Tarefa
+    > Tarefas concluidas: lista de Tarefa
+
+
+
+
+    > Calendário do ano: dicionario  (ideia, mas provavelmente sera descartada)
+        > chave: mês(número)
+        > valor: dicionario
+                 > chave: dia(número)
+                 > valor: lista de Tarefas para aquele dia
+
+> Ações:
+    > Adicionar tarefa
+    > Excluir tarefa
+    > Obter tarefas por status (analisar)
+    > Obter tarefas de um determinado dia
+    > Mostrar dia desejado
+    > Mostrar semana desejada
+
+
+* Tarefa:
+> Atributos:
+    > Nome: string
+    > Data de criação: datetime
+    > Data de conclusão: datetime (opcional)
+    > Status: enum
+    > Prioridade: enum
+    > Descrição: string
+
+    + Status:
+    > Categorias:
+        > Para executar
+        > Executando
+        > Concluída
+
+    + Prioridade:
+    > Categorias:
+        > Alta
+        > Média
+        > Baixa
+
+> Ações:
+    > Renomear tarefa - ok
+    > Alterar data de conclusão - ok
+    > Alterar status - ok
+    > Alterar prioridade - ok
+    > Alterar descrição - ok
+
+
+
+>> Cadastro de Tarefas:
+Permitir que o usuário cadastre suas tarefas para a semana.
+Incluir informações como nome da tarefa, descrição, data e hora de início/fim.
+
+>> Visualização da Rotina:
+Exibir a rotina semanal de tarefas de forma clara e organizada.
+Permitir visualização diária, semanal e mensal.
+
+>> Priorização:
+Permitir que o usuário defina a prioridade das tarefas.
+Classificar ou destacar as tarefas de acordo com a prioridade.
+
+>> Categorias e Etiquetas #:
+Permitir que o usuário categorize suas tarefas (trabalho, estudo, pessoal, etc.).
+
+>> Edição e Exclusão:
+Possibilitar a edição e exclusão de tarefas, caso haja mudanças na programação.
+
+>> Relatórios Locais:
+Gerar relatórios sobre o desempenho na conclusão de tarefas ao longo do tempo.
+
+>> Feedback de Conclusão:
+Incluir a opção para o usuário marcar uma tarefa como concluída e fornecer feedback.
