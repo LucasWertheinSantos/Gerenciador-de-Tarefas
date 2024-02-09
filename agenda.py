@@ -1,7 +1,6 @@
 from datetime import datetime
 
-from Main import Prioridade, Status
-
+from main import Prioridade, Status
 from tarefa import Tarefa
 
 

@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from Main import Status
+from main import Status
 
 DATE_FORMAT = "%d/%m/%y, %H:%M"
 
