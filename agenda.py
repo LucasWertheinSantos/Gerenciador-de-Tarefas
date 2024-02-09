@@ -73,32 +73,63 @@ class Agenda:
 
     def listar_tarefas_por_status(self, status):
         if status == Status.PARA_EXECUTAR:
-            self.listar_tarefas(self.tarefas_para_executar, status)
+            self.imprimir_tarefas_status(self.tarefas_para_executar, status)
         elif status == Status.EXECUTANDO:
-            self.listar_tarefas(self.tarefas_executando, status)
+            self.imprimir_tarefas_status(self.tarefas_executando, status)
         elif status == Status.CONCLUIDA:
-            self.listar_tarefas(self.tarefas_concluidas, status)
+            self.imprimir_tarefas_status(self.tarefas_concluidas, status)
 
-    def listar_tarefas(self, tarefas, status):
+    def imprimir_tarefas_status(self, tarefas, status):
         print()
         print(f">>> Lista de tarefas - Status: {status.name} <<<\n")
         for tarefa in tarefas:
             print(tarefa)
 
-    def feedback(self):
-        task = Tarefa(input("Digite o nome da tarefa: "), "")
-        status = int(
-            input(
-                "1- Para executar \n2- Executando \n3- Concluida \nDigite o novo status da sua atividade: "
-            )
+    def pesquisar_tarefas_por_data(self, data):
+        tarefas_data = []
+        tarefas_data = list(
+            filter(lambda t: t.data_hora.date() == data, self.tarefas_para_executar)
         )
-        if status == 3:
-            comentario = input(
-                "Deseja deixar algum comentário sobre a tarefa? sim/nao: "
-            )
-            if comentario == "sim":
-                comentario = input("Deixe seu comentário: ")
-                print(comentario)
-                task.alterar_status(Status.CONCLUIDA)
-            else:
-                task.alterar_status(Status.CONCLUIDA)
+        tarefas_data += list(
+            filter(lambda t: t.data_hora.date() == data, self.tarefas_executando)
+        )
+        tarefas_data += list(
+            filter(lambda t: t.data_hora.date() == data, self.tarefas_concluidas)
+        )
+        return tarefas_data
+
+    # Uso interno
+    def imprimir_tarefas_data(self, tarefas):
+        data = tarefas[0].data_hora
+        formato = "%d/%m/%y"
+        print()
+        print(f">>> Lista de tarefas - Data: {data.strftime(formato)} <<<\n")
+        for i, tarefa in enumerate(tarefas):
+            print(f">> {i+1}:")
+            print(tarefa)
+
+    # Por enquanto permite adicionar feedback a qualquer tarefa
+    def adicionar_feedback_tarefa(self):
+        print()
+        data_str = input(
+            "Digite a data da tarefa que deseja dar feedback (dd/mm/aaaa): "
+        )
+        data = [int(i) for i in data_str.split("/")]
+        tarefas = self.pesquisar_tarefas_por_data(
+            datetime(data[2], data[1], data[0]).date()
+        )
+        if len(tarefas) == 0:
+            print(">>> Não existem tarefas criadas na data escolhida!")
+            return
+
+        self.imprimir_tarefas_data(tarefas)
+        num_tarefa = int(input("Digite o número da tarefa desejada: "))
+        if num_tarefa > len(tarefas) or num_tarefa < 1:
+            print("Número inválido!")
+            return
+
+        tarefa = tarefas[num_tarefa - 1]
+        print(tarefa)
+        print(">>> Feedback <<<")
+        comentario = input("> Digite seu comentário sobre a tarefa: ")
+        tarefa.alterar_feedback(comentario)
