@@ -1,11 +1,20 @@
 from datetime import datetime
+
 from Main import Status
 
 DATE_FORMAT = "%d/%m/%y, %H:%M"
 
 
 class Tarefa:
-    def __init__(self, nome, data_hora, descricao=None, status=Status.PARA_EXECUTAR, prioridade=None, categoria= None):
+    def __init__(
+        self,
+        nome,
+        data_hora,
+        descricao=None,
+        status=Status.PARA_EXECUTAR,
+        prioridade=None,
+        categoria=None,
+    ):
         self.nome = nome
         self.data_criacao = datetime.now()
         self.data_hora = data_hora
@@ -13,7 +22,7 @@ class Tarefa:
         self.descricao = descricao
         self.status = status
         self.prioridade = prioridade
-        self.categoria= categoria
+        self.categoria = categoria
 
     def __str__(self) -> str:
         s = f">> Tarefa: {self.nome}\n"
@@ -24,12 +33,12 @@ class Tarefa:
         if self.prioridade:
             s += f"Prioridade: {self.prioridade.name}\n"
         # s += f"Data de criação: {self.data_criacao.strftime(DATE_FORMAT)}\n"
-            
+
         if self.data_hora:
             s += f"Data e hora da tarefa: {self.data_hora.strftime(DATE_FORMAT)}\n"
 
         if self.categoria:
-            s+= f"Categoria: {self.categoria}\n"
+            s += f"Categoria: {self.categoria}\n"
 
         if self.data_conclusao:
             s += f"Data de conclusão: {self.data_conclusao.strftime(DATE_FORMAT)}\n"
@@ -63,5 +72,5 @@ class Tarefa:
         print(f"Descrição alterada para: {self.descricao}\n")
 
     def alterar_categoria(self, categoria):
-        self.categoria= categoria
+        self.categoria = categoria
         print(f"Categoria alterada para:  {self.categoria}\n")

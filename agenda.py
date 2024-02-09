@@ -1,6 +1,7 @@
 from datetime import datetime
 
 from Main import Prioridade, Status
+
 from tarefa import Tarefa
 
 
@@ -26,7 +27,7 @@ class Agenda:
         resp = input("Deseja adicionar descrição? (s/n): ")
         if resp == "s":
             descricao = input("Descrição da tarefa: ")
-            
+
         status = Status.PARA_EXECUTAR
         resp = input("Deseja adicionar status? (s/n): ")
         if resp == "s":
@@ -36,7 +37,7 @@ class Agenda:
             print("3 - Concluída")
             op = int(input("Opção: "))
             status = Status(op)
-            
+
         prioridade = None
         resp = input("Deseja adicionar prioridade? (s/n): ")
         if resp == "s":
@@ -47,10 +48,12 @@ class Agenda:
             op = int(input("Opção: "))
             prioridade = Prioridade(op)
 
-        categoria= None
-        resp= input("Deseja adicionar categoria? (s/n): ")
+        categoria = None
+        resp = input("Deseja adicionar categoria? (s/n): ")
         if resp == "s":
-            categoria= input("Digite o nome da categoria que deseja adicionar esta atividade: ")
+            categoria = input(
+                "Digite o nome da categoria que deseja adicionar esta atividade: "
+            )
 
         tarefa = Tarefa(nome, data_horario, descricao, status, prioridade, categoria)
         self.associar_tarefa(tarefa)
@@ -84,12 +87,18 @@ class Agenda:
             print(tarefa)
 
     def feedback(self):
-        task= Tarefa(input("Digite o nome da tarefa: "), "")
-        status= int(input("1- Para executar \n2- Executando \n3- Concluida \nDigite o novo status da sua atividade: "))
+        task = Tarefa(input("Digite o nome da tarefa: "), "")
+        status = int(
+            input(
+                "1- Para executar \n2- Executando \n3- Concluida \nDigite o novo status da sua atividade: "
+            )
+        )
         if status == 3:
-            comentario= input("Deseja deixar algum comentário sobre a tarefa? sim/nao: ")
+            comentario = input(
+                "Deseja deixar algum comentário sobre a tarefa? sim/nao: "
+            )
             if comentario == "sim":
-                comentario= input("Deixe seu comentário: ")
+                comentario = input("Deixe seu comentário: ")
                 print(comentario)
                 task.alterar_status(Status.CONCLUIDA)
             else:
