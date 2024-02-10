@@ -71,15 +71,30 @@ class Agenda:
         else:
             self.tarefas_concluidas.append(tarefa)
 
+    def excluir_tarefa(self, tarefa):
+        status = tarefa.status
+        if status == Status.PARA_EXECUTAR:
+            self.tarefas_para_executar.remove(tarefa)
+        elif status == Status.EXECUTANDO:
+            self.tarefas_executando.remove(tarefa)
+        elif status == Status.CONCLUIDA:
+            self.tarefas_concluidas.remove(tarefa)
+
+    # Alterar depois para retornar a lista de tarefas
     def listar_tarefas_por_status(self, status):
         if status == Status.PARA_EXECUTAR:
-            self.imprimir_tarefas_status(self.tarefas_para_executar, status)
+            self.imprimir_tarefas_status(self.tarefas_para_executar)
         elif status == Status.EXECUTANDO:
-            self.imprimir_tarefas_status(self.tarefas_executando, status)
+            self.imprimir_tarefas_status(self.tarefas_executando)
         elif status == Status.CONCLUIDA:
-            self.imprimir_tarefas_status(self.tarefas_concluidas, status)
+            self.imprimir_tarefas_status(self.tarefas_concluidas)
 
-    def imprimir_tarefas_status(self, tarefas, status):
+    def imprimir_tarefas_status(self, tarefas):
+        """Apenas para uso interno"""
+        if len(tarefas) < 1:
+            print("\nNão existem tarefas marcadas com esse status!\n")
+            return
+        status = tarefas[0].status
         print()
         print(f">>> Lista de tarefas - Status: {status.name} <<<\n")
         for tarefa in tarefas:
@@ -98,8 +113,8 @@ class Agenda:
         )
         return tarefas_data
 
-    # Uso interno
     def imprimir_tarefas_data(self, tarefas):
+        """Apenas para uso interno"""
         data = tarefas[0].data_hora
         formato = "%d/%m/%y"
         print()

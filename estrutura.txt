@@ -15,9 +15,10 @@
 
 > Ações:
     > Adicionar tarefa (ok)
-    > Excluir tarefa (por enquanto apenas na classe Tarefa)
+    > Excluir tarefa (ok)
     > Obter tarefas por status (ok)
-    > Obter tarefas de um determinado dia (ok)
+    > Obter tarefas por data (ok)
+    > Adicionar feedback a uma tarefa (ok)
     > Mostrar dia desejado
     > Mostrar semana desejada
 
@@ -52,6 +53,8 @@
     > Alterar status - ok
     > Alterar prioridade - ok
     > Alterar descrição - ok
+    > Alterar categoria - ok
+    > Alterar feedback - ok
 
 
 
