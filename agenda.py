@@ -80,27 +80,27 @@ class Agenda:
         elif status == Status.CONCLUIDA:
             self.tarefas_concluidas.remove(tarefa)
 
-    # Alterar depois para retornar a lista de tarefas
-    def listar_tarefas_por_status(self, status):
+    def obter_tarefas_por_status(self, status):
         if status == Status.PARA_EXECUTAR:
-            self.imprimir_tarefas_status(self.tarefas_para_executar)
+            return self.tarefas_para_executar
         elif status == Status.EXECUTANDO:
-            self.imprimir_tarefas_status(self.tarefas_executando)
+            return self.tarefas_executando
         elif status == Status.CONCLUIDA:
-            self.imprimir_tarefas_status(self.tarefas_concluidas)
+            return self.tarefas_concluidas
 
     def imprimir_tarefas_status(self, tarefas):
         """Apenas para uso interno"""
-        if len(tarefas) < 1:
+        if len(tarefas) == 0:
             print("\nNão existem tarefas marcadas com esse status!\n")
             return
         status = tarefas[0].status
         print()
         print(f">>> Lista de tarefas - Status: {status.name} <<<\n")
-        for tarefa in tarefas:
+        for i, tarefa in enumerate(tarefas):
+            print(f">> {i+1}:")
             print(tarefa)
 
-    def pesquisar_tarefas_por_data(self, data):
+    def obter_tarefas_por_data(self, data):
         tarefas_data = []
         tarefas_data = list(
             filter(lambda t: t.data_hora.date() == data, self.tarefas_para_executar)
@@ -130,7 +130,7 @@ class Agenda:
             "Digite a data da tarefa que deseja dar feedback (dd/mm/aaaa): "
         )
         data = [int(i) for i in data_str.split("/")]
-        tarefas = self.pesquisar_tarefas_por_data(
+        tarefas = self.obter_tarefas_por_data(
             datetime(data[2], data[1], data[0]).date()
         )
         if len(tarefas) == 0:

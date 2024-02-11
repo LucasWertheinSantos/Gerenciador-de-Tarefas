@@ -18,7 +18,7 @@ def salvar_dados_arquivo(dados):
     try:
         with open(FILE_NAME, "wb") as f:
             pickle.dump(dados, f, protocol=pickle.HIGHEST_PROTOCOL)
-            print("Dados salvos no arquivo com sucesso!\n")
+            print("\nDados salvos no arquivo com sucesso!\n")
     except Exception as ex:
         print("Error during pickling object: ", ex)
 
@@ -52,15 +52,15 @@ if __name__ == "__main__":
     agenda.adicionar_tarefa(task2)
 
     #############
-    dados_para_arquivo = []
-    dados_para_arquivo.append(agenda)
+    dados_dict = {}
+    dados_dict["agenda"] = agenda
 
-    salvar_dados_arquivo(dados_para_arquivo)
+    salvar_dados_arquivo(dados_dict)
 
     # Testes
     reload = carregar_dados_arquivo(FILE_NAME)
-    for i in reload:
+    for key, value in reload.items():
         # i = cast(Agenda, i)
-        if isinstance(i, Agenda):
+        if isinstance(value, Agenda):
             print("É agenda!")
     print()
