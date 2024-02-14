@@ -9,13 +9,17 @@ dicionarioStatus = {0: Status.PARA_EXECUTAR, 1: Status.EXECUTANDO, 2: Status.CON
 dicionarioPrioridade = {0: Prioridade.ALTA, 1: Prioridade.MEDIA, 2: Prioridade.BAIXA}
 
 DATE_FORMAT = "%d/%m/%y, %H:%M"
+DATA_FILE = "agenda.dat"
 
-import gui as gui
+import gui
 from agenda import *
 
 if __name__ == "__main__":
     agenda = Agenda()
-    agenda.load_tasks("agenda.dat")
+    try:
+        agenda.load_tasks(DATA_FILE)
+    except:
+        pass
     gui.drawTasks(agenda)
 
     # Arrumando os eventos de botões
@@ -33,4 +37,4 @@ if __name__ == "__main__":
     gui.canvas_tasks.bind("<Button-1>", lambda event: gui.selectTask(event, agenda))
 
     gui.window.mainloop()
-    agenda.save_tasks("agenda.dat")
+    agenda.save_tasks(DATA_FILE)

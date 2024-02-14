@@ -1,18 +1,24 @@
+import os
+import sys
 import tkinter as tk
 import tkinter.messagebox as msg
-from datetime import datetime
 from pathlib import Path
 
 from main import Prioridade, Status, dicionarioPrioridade, dicionarioStatus
 from tarefa import Tarefa
 
-# Funções para associar o caminho de imagens
-OUTPUT_PATH = Path(__file__).parent
-ASSETS_PATH = OUTPUT_PATH / Path("assets")
-
 
 def assets(path: str, frame: str) -> Path:
-    return ASSETS_PATH / Path(frame) / Path(path)
+    # path = os.getcwd() / Path("assets") / Path(frame) / Path(path)
+    # return path
+    path = Path("assets") / Path(frame) / Path(path)
+    try:
+        # PyInstaller creates a temp folder and stores path in _MEIPASS
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
+
+    return os.path.join(base_path, path)
 
 
 def relative_to_assets(path: str, frame: str) -> Path:
