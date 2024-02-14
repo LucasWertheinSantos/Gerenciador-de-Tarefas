@@ -1,8 +1,8 @@
 from datetime import datetime
 
-from main import Prioridade, Status
+from main import Prioridade, Status, dicionarioStatus, dicionarioPrioridade
 from tarefa import Tarefa
-
+import pickle
 
 class Agenda:
     def __init__(self):
@@ -10,17 +10,23 @@ class Agenda:
         self.tarefas_executando = []
         self.tarefas_concluidas = []
 
-    def criar_tarefa(self):
-        print()
-        print(">> Criação de nova tarefa <<")
-        nome = input("Nome da tarefa: ")
+    def str_data_horario(self, data, horario):
         data_str = ""
-        data_str += input("Data da tarefa (dd/mm/aaaa): ")
-        data_str += " " + input("Horário da tarefa (hh:mm): ")
+        data_str += data
+        data_str += " " + horario
         data_str = data_str.split(" ")
         data = [int(i) for i in data_str[0].split("/")]
         horario = [int(i) for i in data_str[1].split(":")]
         data_horario = datetime(data[2], data[1], data[0], horario[0], horario[1])
+        return data_horario
+
+    def criar_tarefa(self):
+        print()
+        print(">> Criação de nova tarefa <<")
+        nome = input("Nome da tarefa: ")
+        data = input("Data da tarefa (dd/mm/aaaa): ")
+        horario = input("Horário da tarefa (hh:mm): ")
+        data_horario = self.str_data_horario(data, horario)
 
         descricao = None
         resp = input("Deseja adicionar descrição? (s/n): ")
@@ -62,6 +68,24 @@ class Agenda:
     def adicionar_tarefa(self, tarefa):
         self.associar_tarefa(tarefa)
 
+    def excluir_tarefa(self, tarefa_index, tarefa_status):
+        if tarefa_status == 0:
+            self.tarefas_para_executar.pop(tarefa_index)
+        elif tarefa_status == 1:
+            self.tarefas_executando.pop(tarefa_index)
+        elif tarefa_status == 2:
+            self.tarefas_concluidas.pop(tarefa_index)
+
+    def pegar_tarefa(self, tarefa_index, tarefa_status):
+        if tarefa_index == -1:
+            return None
+        if tarefa_status == 0:
+            return self.tarefas_para_executar[tarefa_index]
+        elif tarefa_status == 1:
+            return self.tarefas_executando[tarefa_index]
+        elif tarefa_status == 2:
+            return self.tarefas_concluidas[tarefa_index]
+        
     def associar_tarefa(self, tarefa):
         status = tarefa.status
         if status == Status.PARA_EXECUTAR:
@@ -71,36 +95,21 @@ class Agenda:
         else:
             self.tarefas_concluidas.append(tarefa)
 
-    def excluir_tarefa(self, tarefa):
-        status = tarefa.status
+    def listar_tarefas_por_status(self, status):
         if status == Status.PARA_EXECUTAR:
-            self.tarefas_para_executar.remove(tarefa)
+            self.imprimir_tarefas_status(self.tarefas_para_executar, status)
         elif status == Status.EXECUTANDO:
-            self.tarefas_executando.remove(tarefa)
+            self.imprimir_tarefas_status(self.tarefas_executando, status)
         elif status == Status.CONCLUIDA:
-            self.tarefas_concluidas.remove(tarefa)
+            self.imprimir_tarefas_status(self.tarefas_concluidas, status)
 
-    def obter_tarefas_por_status(self, status):
-        if status == Status.PARA_EXECUTAR:
-            return self.tarefas_para_executar
-        elif status == Status.EXECUTANDO:
-            return self.tarefas_executando
-        elif status == Status.CONCLUIDA:
-            return self.tarefas_concluidas
-
-    def imprimir_tarefas_status(self, tarefas):
-        """Apenas para uso interno"""
-        if len(tarefas) == 0:
-            print("\nNão existem tarefas marcadas com esse status!\n")
-            return
-        status = tarefas[0].status
+    def imprimir_tarefas_status(self, tarefas, status):
         print()
         print(f">>> Lista de tarefas - Status: {status.name} <<<\n")
-        for i, tarefa in enumerate(tarefas):
-            print(f">> {i+1}:")
+        for tarefa in tarefas:
             print(tarefa)
 
-    def obter_tarefas_por_data(self, data):
+    def pesquisar_tarefas_por_data(self, data):
         tarefas_data = []
         tarefas_data = list(
             filter(lambda t: t.data_hora.date() == data, self.tarefas_para_executar)
@@ -113,8 +122,8 @@ class Agenda:
         )
         return tarefas_data
 
+    # Uso interno
     def imprimir_tarefas_data(self, tarefas):
-        """Apenas para uso interno"""
         data = tarefas[0].data_hora
         formato = "%d/%m/%y"
         print()
@@ -130,7 +139,7 @@ class Agenda:
             "Digite a data da tarefa que deseja dar feedback (dd/mm/aaaa): "
         )
         data = [int(i) for i in data_str.split("/")]
-        tarefas = self.obter_tarefas_por_data(
+        tarefas = self.pesquisar_tarefas_por_data(
             datetime(data[2], data[1], data[0]).date()
         )
         if len(tarefas) == 0:
@@ -148,3 +157,12 @@ class Agenda:
         print(">>> Feedback <<<")
         comentario = input("> Digite seu comentário sobre a tarefa: ")
         tarefa.alterar_feedback(comentario)
+
+    def save_tasks(self, filename):
+        with open(filename, 'wb') as file:
+            pickle.dump([self.tarefas_para_executar, self.tarefas_executando, self.tarefas_concluidas], file)
+
+    def load_tasks(self, filename):
+        with open(filename, 'rb') as file:
+            task_lists = pickle.load(file)
+        self.tarefas_para_executar, self.tarefas_executando, self.tarefas_concluidas = task_lists

@@ -1,66 +1,36 @@
 from datetime import datetime
 from enum import Enum
-from typing import cast  # Usado para teste por enquanto
-
-import dill as pickle
 
 Status = Enum("Status", ["PARA_EXECUTAR", "EXECUTANDO", "CONCLUIDA"])
 Prioridade = Enum("Prioridade", ["ALTA", "MEDIA", "BAIXA"])
 
+# Dicionarios
+dicionarioStatus = {0: Status.PARA_EXECUTAR, 1: Status.EXECUTANDO, 2: Status.CONCLUIDA}
+dicionarioPrioridade = {0: Prioridade.ALTA, 1: Prioridade.MEDIA, 2: Prioridade.BAIXA}
+
 DATE_FORMAT = "%d/%m/%y, %H:%M"
 
-FILE_NAME = "data.pkl"
-
+import gui as gui
 from agenda import *
 
-
-def salvar_dados_arquivo(dados):
-    try:
-        with open(FILE_NAME, "wb") as f:
-            pickle.dump(dados, f, protocol=pickle.HIGHEST_PROTOCOL)
-            print("\nDados salvos no arquivo com sucesso!\n")
-    except Exception as ex:
-        print("Error during pickling object: ", ex)
-
-
-def carregar_dados_arquivo(arquivo):
-    with open(arquivo, "rb") as f:
-        try:
-            dados = pickle.load(f)
-            return dados
-        except pickle.UnpicklingError:
-            print("Error: Cannot unpickling object")
-
-
 if __name__ == "__main__":
-    task1 = Tarefa(
-        "Estudar para TEP",
-        datetime(2024, 2, 10, 14, 00),
-        "Ler conteúdo para a prova",
-        status=Status.EXECUTANDO,
-        prioridade=Prioridade.MEDIA,
-    )
-    task2 = Tarefa(
-        "Ir ao mercado",
-        datetime(2024, 2, 10, 15, 00),
-        "Fazer compras do mês",
-        status=Status.PARA_EXECUTAR,
-        prioridade=Prioridade.MEDIA,
-    )
     agenda = Agenda()
-    agenda.adicionar_tarefa(task1)
-    agenda.adicionar_tarefa(task2)
+    agenda.load_tasks("agenda.dat")
+    gui.drawTasks(agenda)
 
-    #############
-    dados_dict = {}
-    dados_dict["agenda"] = agenda
+    # Arrumando os eventos de botões
+    gui.telaNewTask.button_concluir.config(
+        command=lambda: gui.telaNewTask.concluir(agenda)
+    )
+    gui.main_frame_buttons[0].config(command=gui.novaTarefaScreen)
+    gui.main_frame_buttons[1].config(command=lambda: gui.deleteTask(agenda))
+    gui.main_frame_buttons[2].config(command=lambda: gui.editTask(agenda))
+    gui.main_frame_buttons[5].config(command=gui.fecharJanela)
+    gui.window.bind("<Button-1>", lambda event: gui.click())
+    gui.canvas_tasks.bind(
+        "<MouseWheel>", lambda event: gui.scrollTasks(event.delta / 10, agenda)
+    )
+    gui.canvas_tasks.bind("<Button-1>", lambda event: gui.selectTask(event, agenda))
 
-    salvar_dados_arquivo(dados_dict)
-
-    # Testes
-    reload = carregar_dados_arquivo(FILE_NAME)
-    for key, value in reload.items():
-        # i = cast(Agenda, i)
-        if isinstance(value, Agenda):
-            print("É agenda!")
-    print()
+    gui.window.mainloop()
+    agenda.save_tasks("agenda.dat")
