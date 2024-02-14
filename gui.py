@@ -65,17 +65,20 @@ def startScreen():
     frame_inicio.place(x=0, y=0, width=width, height=height)
 
 
-def break_text_by_length(text, max_length):
+def break_text_by_length(text, font: tkfont, task_width):
     words = text.split()
     lines = []
     current_line = ""
 
+    espaco_restante = task_width - 10
     for word in words:
-        if len(current_line) + len(word) <= max_length:
+        if font.measure(word) < espaco_restante:
             current_line += word + " "
+            espaco_restante -= font.measure(word) + font.measure(" ")
         else:
             lines.append(current_line.rstrip())
             current_line = word + " "
+            espaco_restante = task_width - 10 - font.measure(word) - font.measure(" ")
 
     if current_line:
         lines.append(current_line.rstrip())
@@ -146,20 +149,21 @@ def drawTasks(agenda):
             )
 
             # Desenhar as informações das tarefas
-            prioridade = "Nennhuma"
+            prioridade = "Nenhuma"
             if task.prioridade != None:
                 prioridade = task.prioridade.name
-            char_limite = 34
-            text = f"{break_text_by_length('NOME:'+task.nome, char_limite)}\n"
+            font = tkfont.Font(family="Calibri", weight="normal", size=12)
+
+            text = f"{break_text_by_length('NOME: '+ task.nome, font, taskWid)}\n"
             text += f"DATA: {task.data_hora.strftime('%d/%m/%Y')}\n"
             text += f"HORÁRIO: {task.data_hora.strftime('%H:%M')}\n"
             text += f"PRIORIDADE: {prioridade[:1].upper() + prioridade[1:].lower()}\n"
             text += f"CATEGORIA: {task.categoria}\n"
             text += (
-                f"{break_text_by_length('DESCRIÇÃO:' + task.descricao, char_limite)}"
+                f"{break_text_by_length('DESCRIÇÃO: ' + task.descricao, font, taskWid)}"
             )
             canvas_tasks.create_text(
-                x + 10, y + 10, anchor="nw", text=text, font=("Arial", 12)
+                x + 10, y + 10, anchor="nw", text=text, font=("Calibri", 12)
             )
 
 
@@ -662,7 +666,7 @@ class TelaNewTask:
             return
         try:
             data_horario = agenda.str_data_horario(self.data, self.horario)
-        except ValueError:
+        except:
             msg.showwarning(
                 "Data/horário inválido",
                 "Preencha os campos 'Data' e 'Horário' no formato designado\n"
