@@ -28,9 +28,6 @@ window = tk.Tk()
 
 # Configurando a janela
 window.title("Minha Agenda - v1.0")
-# width, height = window.winfo_screenwidth(), window.winfo_screenheight()
-# width -= 100
-# height -= 80
 width = 1060
 height = 640
 window.geometry("%dx%d+0+0" % (width, height))
@@ -344,18 +341,6 @@ st_image_1 = canvas_inicio.create_image(width / 2.0, height / 2.0, image=start_i
 start_image_2 = tk.PhotoImage(file=relative_to_assets("image_2.png", "frame2"))
 st_image_2 = canvas_inicio.create_image(width / 2.0, height / 2.0, image=start_image_2)
 
-start_image_3 = tk.PhotoImage(file=relative_to_assets("image_3.png", "frame2"))
-# st_image_3 = canvas_inicio.create_image(1304.0, 906.0, image=start_image_3)
-
-start_image_4 = tk.PhotoImage(file=relative_to_assets("image_4.png", "frame2"))
-# image_4 = canvas_inicio.create_image(1405.0, 891.0, image=start_image_4)
-
-image_image_5 = tk.PhotoImage(file=relative_to_assets("image_5.png", "frame2"))
-# image_5 = canvas_inicio.create_image(1293.0, 915.0, image=image_image_5)
-
-image_image_6 = tk.PhotoImage(file=relative_to_assets("image_6.png", "frame2"))
-# image_6 = canvas_inicio.create_image(1319.0, 915.0, image=image_image_6)
-
 
 ### Tela nova tarefa
 class TelaNewTask:
@@ -389,24 +374,7 @@ class TelaNewTask:
             0.0, 0.0, width, height, fill="#05ACF5", outline=""
         )
 
-        self.image_1 = tk.PhotoImage(file=relative_to_assets("image_1.png", "frame3"))
         self.image_2 = tk.PhotoImage(file=relative_to_assets("image_2.png", "frame3"))
-
-        # self.entry_image_1 = tk.PhotoImage(
-        #     file=relative_to_assets("entry_1.png", "frame3")
-        # )
-        # self.entry_image_2 = tk.PhotoImage(
-        #     file=relative_to_assets("entry_2.png", "frame3")
-        # )
-        # self.entry_image_3 = tk.PhotoImage(
-        #     file=relative_to_assets("entry_4.png", "frame3")
-        # )
-        # self.entry_image_4 = tk.PhotoImage(
-        #     file=relative_to_assets("entry_5.png", "frame3")
-        # )
-        # self.entry_image_5 = tk.PhotoImage(
-        #     file=relative_to_assets("entry_6.png", "frame3")
-        # )
 
         self.button_image_1 = tk.PhotoImage(
             file=relative_to_assets("button_1.png", "frame3")
@@ -433,7 +401,6 @@ class TelaNewTask:
             file=relative_to_assets("button_8.png", "frame3")
         )
 
-        # self.image_1_id = self.canvas.create_image(1000.0, 500.0, image=self.image_1)
         self.image_2_id = self.canvas.create_image(width / 2.0, 0.0, image=self.image_2)
 
         texts_info = [
@@ -450,40 +417,6 @@ class TelaNewTask:
             tk.Label(
                 self.canvas, text=text[1], bg="#05ACF5", font=("Calibri Bold", 13)
             ).place(x=0.27 * width, y=text[0])
-
-            # self.canvas.create_text(
-            #     0.27 * width,
-            #     y,
-            #     anchor="nw",
-            #     text=text,
-            #     fill="#FFFFFF",
-            #     font=("Calibri Bold", 13),
-            # )
-
-        # self.entry_bg_1 = self.canvas.create_image(
-        #     719.0, 272.5, image=self.entry_image_1
-        # )
-        # self.entry_bg_2 = self.canvas.create_image(
-        #     719.0, 189.5, image=self.entry_image_2
-        # )
-        # self.entry_bg_3 = self.canvas.create_image(
-        #     719.0, 373.5, image=self.entry_image_3
-        # )
-        # self.entry_bg_4 = self.canvas.create_image(
-        #     719.0, 475.5, image=self.entry_image_4
-        # )
-        # self.entry_bg_5 = self.canvas.create_image(
-        #     717.5, 783.5, image=self.entry_image_5
-        # )
-
-        # Criando as caixas de texto
-        # (0.169 * height, "Nome da tarefa:"),
-        # (0.254 * height, "Data da tarefa (dd/mm/aaaa):"),
-        # (0.338 * height, "Horário da tarefa (hh:mm):"),
-        # (0.423 * height, "Descrição:"),
-        # (0.508 * height, "Status da tarefa:"),
-        # (0.604 * height, "Prioridade da tarefa:"),
-        # (0.701 * height, "Categoria da tarefa (Ex.: Estudos, Trabalho...):"),
 
         entry_y = [
             texts_info[0][0],

@@ -1,4 +1,3 @@
-from datetime import datetime
 from enum import Enum
 
 Status = Enum("Status", ["PARA_EXECUTAR", "EXECUTANDO", "CONCLUIDA"])
